@@ -7,26 +7,26 @@ misconfigurations:
       - "terraform-aws-modules/eks/aws/main.tf"
     statement: >-
       Upstream EKS module defaults public cluster endpoint; restricted by security groups.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: AWS-0041
     paths:
       - "terraform-aws-modules/eks/aws/main.tf"
     statement: >-
       Upstream EKS module allows public CIDR access; managed by network security group overrides.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: AWS-0104
     paths:
       - "terraform-aws-modules/eks/aws/node_groups.tf"
     statement: >-
       Upstream EKS module node group egress rules allow outbound traffic.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: AWS-0132
     paths:
       - "infra/terraform/modules/s3/main.tf"
     statement: >-
       The module uses AWS-managed KMS keys; migration to customer-managed keys
       requires a coordinated key-rotation and recovery runbook.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: KSV-0014
     paths:
       - "k8s/**"
@@ -34,14 +34,14 @@ misconfigurations:
     statement: >-
       Legacy stateful and observability images require writable runtime paths;
       each workload must be migrated with explicit writable emptyDir mounts.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: KSV-0056
     paths:
       - "k8s/base/postgres-patroni.yaml"
     statement: >-
       Patroni peer discovery currently requires unrestricted pod networking;
       a tested database NetworkPolicy is required before enforcement.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: KSV-0118
     paths:
       - "k8s/**"
@@ -49,7 +49,7 @@ misconfigurations:
     statement: >-
       Default security-context migration is tracked with the read-only root
       filesystem work because the same legacy images require both changes.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: KSV-0041
     paths:
       - "k8s/base/external-secrets-operator.yml"
@@ -63,7 +63,7 @@ misconfigurations:
       These controllers and scanners intentionally authenticate to the
       Kubernetes API; disabling service-account token mounting would break
       secret reconciliation or placeholder detection.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
 
 # apps/web/pnpm-lock.yaml is a non-canonical compatibility lock. The workspace
 # root lock is authoritative and already pins the fixed versions. Keep the
@@ -75,11 +75,11 @@ vulnerabilities:
     statement: >-
       The canonical root pnpm lock pins brace-expansion 5.0.9; this finding is
       from the retained non-canonical compatibility lock.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
   - id: GHSA-5p4m-2wfm-xmqj
     paths:
       - "apps/web/pnpm-lock.yaml"
     statement: >-
       The canonical root pnpm lock pins js-yaml 4.3.1; this finding is from the
       retained non-canonical compatibility lock.
-    expired_at: 2026-12-31
+    expired_at: 2026-11-18
