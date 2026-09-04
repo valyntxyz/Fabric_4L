@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from services.context_gatherer import ContextGatheringService
-from services.tenant_cypher import TenantCypherValidationError, fetch_tenant_validated_records
-from services.tenant_query_helper import run_tenant_validated_query
+from layer4_agents.services.context_gatherer import ContextGatheringService
+from layer4_agents.services.tenant_cypher import TenantCypherValidationError, fetch_tenant_validated_records
+from layer4_agents.services.tenant_query_helper import run_tenant_validated_query
 
 
 class _FakeResult:

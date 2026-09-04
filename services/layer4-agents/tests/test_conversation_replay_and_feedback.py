@@ -20,7 +20,7 @@ from layer4_agents.workflows.replay import (
     ReplayAuthorizationContext,
     ReplayEventEnvelopeV1,
 )
-from src.models.agent_state import WorkflowStatus, WorkflowType
+from layer4_agents.models.agent_state import WorkflowStatus, WorkflowType
 
 
 class _InMemoryAuditSink:

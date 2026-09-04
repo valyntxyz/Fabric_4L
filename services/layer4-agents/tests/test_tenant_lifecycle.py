@@ -382,7 +382,7 @@ class TestColumnRenameConsistency:
         import inspect
 
         try:
-            models = importlib.import_module("src.shared.models")
+            models = importlib.import_module("layer1_ingestion.shared.models")
             source = inspect.getsource(models)
             # organization_id should not appear as a column definition
             # (it may appear in comments or migration references)

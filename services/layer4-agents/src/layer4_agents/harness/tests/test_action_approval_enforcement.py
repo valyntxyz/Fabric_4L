@@ -4,7 +4,7 @@ import pytest
 
 from layer4_agents.harness.models import ActionClass, GateStatus, GateType, HumanGate
 from layer4_agents.harness.policies import enforce_action_approval
-from policies.approval_actions import ACTION_APPROVAL_POLICIES, ApprovalRequiredError
+from layer4_agents.policies.approval_actions import ACTION_APPROVAL_POLICIES, ApprovalRequiredError
 
 
 @pytest.mark.parametrize("action_class", list(ACTION_APPROVAL_POLICIES.keys()))

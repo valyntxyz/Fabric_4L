@@ -23,7 +23,7 @@ _L4_SRC = Path(__file__).parents[1] / "src"
 if str(_L4_SRC) not in sys.path:
     sys.path.insert(0, str(_L4_SRC))
 
-from integration.layer3_client import Layer3Client
+from layer4_agents.integration.layer3_client import Layer3Client
 
 # ---------------------------------------------------------------------------
 # Helpers

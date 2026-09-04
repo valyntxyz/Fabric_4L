@@ -14,7 +14,7 @@ _l4_src = str(Path(__file__).resolve().parents[1] / "src")
 if _l4_src not in sys.path:
     sys.path.insert(0, _l4_src)
 
-from provenance.models import (
+from layer4_agents.provenance.models import (
     PROVActivity,
     PROVAgent,
     PROVEntity,
@@ -24,7 +24,7 @@ from provenance.models import (
     RDFStarTriple,
     create_prov_graph,
 )
-from provenance.store import InMemoryTripleStore, create_triple_store
+from layer4_agents.provenance.store import InMemoryTripleStore, create_triple_store
 
 # ═══════════════════════════════════════════════════════════════════════════
 # PROVNamespace
