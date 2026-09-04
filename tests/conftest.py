@@ -171,42 +171,37 @@ def _ensure_namespace_module(name: str, paths: list[Path]) -> types.ModuleType:
 def _install_legacy_collection_import_aliases() -> None:
     """Stabilize legacy test import paths during repo-wide collection.
 
-    Several historical tests still import bare ``src.*`` modules or the
-    underscore service path ``services.layer4_agents.src.*``. Keep those imports
-    collection-compatible without changing runtime source-of-truth modules.
+    Several historical Layer 3 tests still import bare ``src.*`` modules. Keep
+    those imports collection-compatible without changing runtime
+    source-of-truth modules.
+
+    Layer 4 contributes nothing here: its legacy ``src.*`` compatibility tree
+    and the ``services.layer4_agents.src.*`` alias were retired with the shim
+    deletion (see ADR-048); Layer 4 tests import the canonical
+    ``layer4_agents.*`` package directly.
     """
     layer3_src = _PROJECT_ROOT / "services" / "layer3-knowledge" / "src"
     layer4_src = _PROJECT_ROOT / "services" / "layer4-agents" / "src"
 
-    src_module = _ensure_namespace_module("src", [layer3_src, layer4_src])
-    src_agents_module = _ensure_namespace_module("src.agents", [layer3_src / "agents", layer4_src / "agents"])
-    src_api_module = _ensure_namespace_module("src.api", [layer3_src / "api", layer4_src / "api"])
+    src_module = _ensure_namespace_module("src", [layer3_src])
+    src_agents_module = _ensure_namespace_module("src.agents", [layer3_src / "agents"])
+    src_api_module = _ensure_namespace_module("src.api", [layer3_src / "api"])
     src_analytics_module = _ensure_namespace_module("src.analytics", [layer3_src / "analytics"])
-    src_models_module = _ensure_namespace_module("src.models", [layer3_src / "models", layer4_src / "models"])
+    src_models_module = _ensure_namespace_module("src.models", [layer3_src / "models"])
     src_retrieval_module = _ensure_namespace_module("src.retrieval", [layer3_src / "retrieval"])
-    src_services_module = _ensure_namespace_module("src.services", [layer3_src / "services", layer4_src / "services"])
-    src_tools_module = _ensure_namespace_module("src.tools", [layer4_src / "tools"])
+    src_services_module = _ensure_namespace_module("src.services", [layer3_src / "services"])
     src_module.agents = src_agents_module
     src_module.api = src_api_module
     src_module.analytics = src_analytics_module
     src_module.models = src_models_module
     src_module.retrieval = src_retrieval_module
     src_module.services = src_services_module
-    src_module.tools = src_tools_module
 
     layer4_agents_module = _ensure_namespace_module("layer4_agents", [layer4_src / "layer4_agents"])
     _ = layer4_agents_module  # noqa: F841 - registered for canonical test imports
 
     services_module = _ensure_namespace_module("services", [_PROJECT_ROOT / "services"])
-
-    layer4_alias = _ensure_namespace_module(
-        "services.layer4_agents",
-        [_PROJECT_ROOT / "services" / "layer4-agents"],
-    )
-    services_module.layer4_agents = layer4_alias
-
-    layer4_src_alias = _ensure_namespace_module("services.layer4_agents.src", [layer4_src])
-    layer4_alias.src = layer4_src_alias
+    _ = services_module  # noqa: F841 - registered for cross-service test imports
 
     # Layer 3 still has runtime modules that use top-level ``from config``.
     # Pin that bare name to the Layer 3 config surface so later sys.path
@@ -685,7 +680,9 @@ def all_route_files(project_root) -> list[Path]:
 def l4_route_files(project_root) -> list[Path]:
     """L4 route files only (highest risk for tenant bypass)."""
     return sorted(
-        (project_root / "services" / "layer4-agents" / "src" / "api" / "routes").glob("*.py")
+        (project_root / "services" / "layer4-agents" / "src" / "layer4_agents" / "api" / "routes").glob(
+            "*.py"
+        )
     )
 
 
