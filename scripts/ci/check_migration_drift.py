@@ -68,7 +68,7 @@ SERVICES: tuple[ServiceMigrationCheck, ...] = (
         name="layer4-agents",
         service_dir=Path("services/layer4-agents"),
         config_path=Path("alembic.ini"),
-        metadata_module="src.database",
+        metadata_module="layer4_agents.database",
         metadata_attr="Base.metadata",
         env_urls=("LAYER4_DATABASE_URL", "CHECKPOINT_DATABASE_URL"),
     ),
