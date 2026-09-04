@@ -11,7 +11,7 @@ IMPORT_MAPPINGS = {
     "value_fabric.layer1": "layer1_ingestion",
     "value_fabric.layer2": "layer2_extraction", 
     "value_fabric.layer3": "layer3_knowledge",
-    "value_fabric.layer4": "services.layer4_agents.src",
+    "value_fabric.layer4": "layer4_agents",
     "value_fabric.layer6": "layer6_benchmarks",
 }
 

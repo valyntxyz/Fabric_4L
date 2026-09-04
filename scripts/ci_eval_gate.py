@@ -43,13 +43,13 @@ async def main() -> int:
 
     import os
 
-    # Ensure layer4-agents src is on path
-    layer4_src = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "services", "layer4-agents")
+    # Ensure the canonical Layer 4 package is importable.
+    layer4_src = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "services", "layer4-agents", "src")
     if layer4_src not in sys.path:
         sys.path.insert(0, layer4_src)
 
-    from src.database import db_session
-    from src.registry.eval_gate import check_eval_gate
+    from layer4_agents.database import db_session
+    from layer4_agents.registry.eval_gate import check_eval_gate
 
     async with db_session() as db:
         passed = await check_eval_gate(db, model_version_id, min_score=args.min_score)
