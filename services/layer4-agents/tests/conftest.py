@@ -20,16 +20,11 @@ _repo_root = _layer4_dir.parent.parent.resolve()  # layer4-agents -> services ->
 if str(_repo_root) not in sys.path:
     sys.path.insert(0, str(_repo_root))
 
-# Add service root to path so legacy ``src.<module>`` imports resolve
-# (runtime relies on src.database and src.contracts during collection).
-if str(_layer4_dir) not in sys.path:
-    sys.path.insert(0, str(_layer4_dir))
-
 # Add tests dir so helper modules (e.g. ``_wait_utils``) can be imported by name.
 if str(_tests_dir) not in sys.path:
     sys.path.insert(0, str(_tests_dir))
 
-# Add src/ so bare `from harness.X` imports in src/harness/__init__.py resolve
+# Add src/ so the canonical ``layer4_agents`` package resolves during collection.
 _src_dir = _layer4_dir / "src"
 if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
@@ -37,7 +32,6 @@ if str(_src_dir) not in sys.path:
 # Ensure the models packages are present before collection-time tests
 # that register targeted models mocks with sys.modules.setdefault().
 import layer4_agents.models  # noqa: E402,F401
-import src.models  # noqa: E402,F401
 
 # Settings are instantiated by several service imports during collection.
 # Keep tests hermetic while still allowing callers to provide real endpoints.
@@ -272,29 +266,6 @@ except (ImportError, ModuleNotFoundError):
     sys.modules["canonical"] = _canonical
     sys.modules["canonical.llm_output_parser"] = _canonical_llm
 
-# services.llm_output_parser — src/services/ has no __init__.py so the bare
-# `from services.llm_output_parser import parse_llm_json` in governed_llm_client
-# fails unless we stub the module directly.
-# Only create and mutate a new stub; never touch an existing real module.
-try:
-    from services.llm_output_parser import parse_llm_json as _  # noqa: F401
-except (ImportError, ModuleNotFoundError):
-    import json as _json2
-    import types as _types
-
-    def _parse_llm_json2(text: str):  # type: ignore[return]
-        try:
-            return _json2.loads(text)
-        except Exception:
-            return {}
-
-    if "services" not in sys.modules:
-        _svc_pkg = _types.ModuleType("services")
-        _svc_pkg.__path__ = []  # type: ignore[attr-defined]
-        sys.modules["services"] = _svc_pkg
-    _svc_llm = _types.ModuleType("services.llm_output_parser")
-    _svc_llm.parse_llm_json = _parse_llm_json2  # type: ignore[attr-defined]
-    sys.modules["services.llm_output_parser"] = _svc_llm
 
 try:
     import jinja2  # noqa: F401
